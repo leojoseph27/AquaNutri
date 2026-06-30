@@ -1,8 +1,8 @@
 ---
 title: AquaNutri
 emoji: 🐟🩺
-colorFrom: teal
-colorTo: emerald
+colorFrom: blue
+colorTo: green
 sdk: docker
 app_port: 7860
 pinned: true

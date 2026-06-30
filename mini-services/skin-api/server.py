@@ -40,12 +40,18 @@ tf.get_logger().setLevel("ERROR")
 # --------------------------------------------------------------------------
 # Configuration
 # --------------------------------------------------------------------------
-MODEL_DIR   = Path("/home/z/my-project/ml/models")
+# Resolve model directory relative to this file, with env override for Docker.
+# In dev: /home/z/my-project/ml/models
+# In Docker: /app/ml/models
+_HERE = Path(__file__).resolve().parent
+_PROJECT_ROOT = _HERE.parent.parent  # mini-services/skin-api -> project root
+MODEL_DIR   = Path(os.environ.get("AQUANUTRI_MODEL_DIR",
+                                   str(_PROJECT_ROOT / "ml" / "models")))
 MODEL_PATH  = MODEL_DIR / "aquanutri_resnet50.h5"
 CLASSES     = MODEL_DIR / "class_indices.json"
 HISTORY     = MODEL_DIR / "training_history.json"
 IMG_SIZE    = (224, 224)
-PORT        = 5001
+PORT        = int(os.environ.get("FLASK_PORT", "5001"))
 
 # Map raw model class names to human-friendly deficiency metadata.
 DEFICIENCY_META = {

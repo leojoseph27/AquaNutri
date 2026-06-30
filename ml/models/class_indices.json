@@ -1,0 +1,8 @@
+{
+  "healthy": 0,
+  "iron_deficiency": 1,
+  "vitamin_a_deficiency": 2,
+  "vitamin_b12_deficiency": 3,
+  "vitamin_d_deficiency": 4,
+  "zinc_deficiency": 5
+}

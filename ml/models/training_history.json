@@ -1,0 +1,44 @@
+{
+  "stage_a": {
+    "accuracy": [
+      0.7161458134651184,
+      0.9375
+    ],
+    "val_accuracy": [
+      0.9375,
+      0.9583333134651184
+    ],
+    "loss": [
+      0.7886770367622375,
+      0.15917035937309265
+    ],
+    "val_loss": [
+      0.13463656604290009,
+      0.11641773581504822
+    ]
+  },
+  "stage_b": {
+    "accuracy": [
+      0.953125
+    ],
+    "val_accuracy": [
+      0.96875
+    ],
+    "loss": [
+      0.13114704191684723
+    ],
+    "val_loss": [
+      0.08288216590881348
+    ]
+  },
+  "final_val_accuracy": 0.96875,
+  "final_val_loss": 0.08288217335939407,
+  "class_names": [
+    "healthy",
+    "iron_deficiency",
+    "vitamin_a_deficiency",
+    "vitamin_b12_deficiency",
+    "vitamin_d_deficiency",
+    "zinc_deficiency"
+  ]
+}

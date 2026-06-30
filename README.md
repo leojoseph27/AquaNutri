@@ -1,10 +1,35 @@
+---
+title: AquaNutri
+emoji: 🐟🩺
+colorFrom: teal
+colorTo: emerald
+sdk: docker
+app_port: 7860
+pinned: true
+license: mit
+short_description: AI skin deficiency detection + sustainable fish nutrition
+tags:
+  - ai
+  - health
+  - aquaculture
+  - resnet50
+  - tensorflow
+  - nextjs
+  - nutrition
+  - sustainable
+  - mhealth
+  - skin-analysis
+---
+
 # AQUANUTRI 🐟🩺
 
 **AI Skin Deficiency Detection & Sustainable Fish Nutrition Platform**
 
-AQUANUTRI is a full-stack mobile-first web platform that detects nutritional deficiencies from skin images using a fine-tuned ResNet50 CNN, and recommends nutrient-rich, locally-suitable fish species for sustainable terrace aquaculture.
+AQUANUTRI detects nutritional deficiencies from skin images using a fine-tuned **ResNet50** CNN, then recommends nutrient-rich, locally-suitable fish species for sustainable terrace aquaculture.
 
-Built from the TELEMATIQUE 2025 research paper *"Aquanutri: A Mobile Platform for Skin-Based Deficiency Detection and Nutrient-Rich Fish Recommendation"*.
+![Status](https://img.shields.io/badge/val_accuracy-96.88%25-emerald)
+![Model](https://img.shields.io/badge/model-ResNet50-teal)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---
 
@@ -26,12 +51,10 @@ Built from the TELEMATIQUE 2025 research paper *"Aquanutri: A Mobile Platform fo
 | **Input** | 224 × 224 × 3, ResNet50 preprocessing |
 | **Augmentation** | Horizontal flip, rotation, zoom, contrast, brightness |
 | **Classes** | 6 (iron_deficiency, vitamin_b12_deficiency, vitamin_d_deficiency, zinc_deficiency, vitamin_a_deficiency, healthy) |
-| **Final val accuracy** | 96.88% |
+| **Final val accuracy** | **96.88%** |
 | **Inference** | Flask service on port 5001, ~120ms per image |
 
 ### Re-train the model
-
-The trained model (`ml/models/aquanutri_resnet50.h5`, ~165 MB) is **excluded from the repo** because GitHub rejects files >100 MB. To regenerate it:
 
 ```bash
 # 1. Generate the synthetic skin dataset (480 images, 6 classes)
@@ -67,7 +90,7 @@ To swap in real DermNet images, replace the contents of `ml/data/skin/<class>/` 
 
 ### Prerequisites
 
-- Node.js 18+ and [Bun](https://bun.sh)
+- Node.js 20+ and [Bun](https://bun.sh)
 - Python 3.10+ with `tensorflow`, `flask`, `flask-cors`, `Pillow`, `numpy`, `pandas`
 
 ### Install & run
@@ -76,18 +99,23 @@ To swap in real DermNet images, replace the contents of `ml/data/skin/<class>/` 
 # 1. Install frontend deps
 bun install
 
-# 2. Train the model (first time only — see ML Pipeline above)
-python3 scripts/01_generate_dataset.py
-python3 scripts/02_train_resnet50.py
-
-# 3. Start the Flask inference service (background)
+# 2. Start the Flask inference service (background)
 cd mini-services/skin-api && python3 server.py &
 
-# 4. Start the Next.js dev server
+# 3. Start the Next.js dev server
 bun run dev
 ```
 
 Open http://localhost:3000 in your browser.
+
+### Docker (Hugging Face Spaces)
+
+```bash
+docker build -t aquanutri .
+docker run -p 7860:7860 aquanutri
+```
+
+Open http://localhost:7860 in your browser.
 
 ---
 
@@ -126,7 +154,9 @@ Open http://localhost:3000 in your browser.
 │       ├── storage.ts                # localStorage scan timeline
 │       └── ui.ts                     # Severity/water-type UI helpers
 ├── mini-services/
-│   └── skin-api/server.py            # Flask inference service (port 5001)
+│   └── skin-api/                     # Flask inference service
+│       ├── server.py
+│       └── requirements.txt
 ├── scripts/
 │   ├── 01_generate_dataset.py        # Synthetic skin dataset generator
 │   ├── 02_train_resnet50.py          # ResNet50 training pipeline
@@ -134,9 +164,12 @@ Open http://localhost:3000 in your browser.
 ├── ml/
 │   ├── data/
 │   │   ├── fish_nutrients.csv        # 28 species, per-100g profiles
-│   │   └── skin/                     # Training dataset (gitignored)
-│   └── models/                       # Trained model + history (gitignored)
-└── prisma/                           # Prisma ORM schema (optional)
+│   │   └── skin/                     # Training dataset (6 classes)
+│   └── models/                       # Trained .h5 (Git LFS) + history JSON
+├── Dockerfile                        # HF Spaces deployment
+├── docker-entrypoint.sh              # Starts Flask + Next.js together
+├── .gitattributes                    # Git LFS tracking for .h5 model
+└── package.json
 ```
 
 ---

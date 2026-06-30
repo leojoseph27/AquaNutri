@@ -1,0 +1,17 @@
+# Don't copy these into the Docker image
+node_modules
+.next
+.git
+.git/lfs
+download/
+upload/
+db/*.db
+db/*.db-journal
+skills/
+.zscripts/
+*.log
+dev.log
+server.log
+.env*
+.DS_Store
+README.md.bak
